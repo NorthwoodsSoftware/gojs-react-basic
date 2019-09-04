@@ -1,1 +1,1 @@
-# GoJS-react
+# GoJS-React
