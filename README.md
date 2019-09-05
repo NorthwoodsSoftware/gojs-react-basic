@@ -1,5 +1,7 @@
 # GoJS React Basic
 
+### By Northwoods Software for [GoJS 2.1 Alpha](https://gojs.net/alpha)
+
 This project provides a basic example of using GoJS in a React app.
 Check out the [Intro page on using GoJS with React](https://gojs.net/alpha/intro/react.html) for more information.
 
