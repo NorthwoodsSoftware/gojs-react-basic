@@ -5,6 +5,11 @@
 This project provides a basic example of using GoJS in a React app.
 Check out the [Intro page on using GoJS with React](https://gojs.net/alpha/intro/react.html) for more information.
 
+When running the sample, try moving around nodes, editing text, relinking, undoing (Ctrl-Z), etc. within the diagram
+and you'll notice the changes are reflected in the inspector area. You'll also notice that changes
+made in the inspector are reflected in the diagram. If you use the React dev tools,
+you can inspect the React state and see it updated as changes happen.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 It also uses immer to simplify state update operations.
 
