@@ -6,7 +6,7 @@ import * as go from 'gojs';
 import { produce } from 'immer';
 import * as React from 'react';
 
-import { Diagram } from './components/Diagram';
+import { DiagramWrapper } from './components/Diagram';
 import { SelectionInspector } from './components/SelectionInspector';
 
 import './App.css';
@@ -52,7 +52,7 @@ class App extends React.Component<{}, AppState> {
     this.refreshNodeIndex(this.state.nodeDataArray);
     this.refreshLinkIndex(this.state.linkDataArray);
     // bind handler methods
-    this.handleDiagramChange = this.handleDiagramChange.bind(this);
+    this.handleDiagramEvent = this.handleDiagramEvent.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRelinkChange = this.handleRelinkChange.bind(this);
@@ -83,7 +83,7 @@ class App extends React.Component<{}, AppState> {
    * On ChangedSelection, find the corresponding data and set the selectedData state.
    * @param e a GoJS DiagramEvent
    */
-  public handleDiagramChange(e: go.DiagramEvent) {
+  public handleDiagramEvent(e: go.DiagramEvent) {
     const name = e.name;
     switch (name) {
       case 'ChangedSelection': {
@@ -108,8 +108,7 @@ class App extends React.Component<{}, AppState> {
               draft.selectedData = null;
             }
           })
-        )
-
+        );
         break;
       }
       default: break;
@@ -209,7 +208,7 @@ class App extends React.Component<{}, AppState> {
         }
         draft.skipsDiagramUpdate = true;  // the GoJS model already knows about these updates
       })
-    )
+    );
   }
 
   /**
@@ -274,12 +273,12 @@ class App extends React.Component<{}, AppState> {
         <p>
           Check out the <a href='https://gojs.net/alpha/intro/react.html' target='_blank' rel='noopener noreferrer'>Intro page on using GoJS with React</a> for more information.
         </p>
-        <Diagram
+        <DiagramWrapper
           nodeDataArray={this.state.nodeDataArray}
           linkDataArray={this.state.linkDataArray}
           modelData={this.state.modelData}
           skipsDiagramUpdate={this.state.skipsDiagramUpdate}
-          onDiagramChange={this.handleDiagramChange}
+          onDiagramEvent={this.handleDiagramEvent}
           onModelChange={this.handleModelChange}
         />
         <label>

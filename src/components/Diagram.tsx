@@ -3,7 +3,10 @@
 */
 
 import * as go from 'gojs';
+import { ReactDiagram } from 'gojs-react';
 import * as React from 'react';
+
+import { GuidedDraggingTool } from '../GuidedDraggingTool';
 
 import './Diagram.css';
 
@@ -12,42 +15,66 @@ interface DiagramProps {
   linkDataArray: Array<go.ObjectData>;
   modelData: go.ObjectData;
   skipsDiagramUpdate: boolean;
-  onDiagramChange: (e: go.DiagramEvent) => void;
+  onDiagramEvent: (e: go.DiagramEvent) => void;
   onModelChange: (e: go.IncrementalData) => void;
 }
 
-export class Diagram extends React.Component<DiagramProps, {}> {
-  private divRef: React.RefObject<HTMLDivElement>;
-  private changedSelectionListener: ((e: go.DiagramEvent) => void) | null = null;
-  private modelChangedListener: ((e: go.ChangedEvent) => void) | null = null;
+export class DiagramWrapper extends React.Component<DiagramProps, {}> {
+  /**
+   * Ref to keep a reference to the Diagram component, which provides access to the GoJS diagram via getDiagram().
+   */
+  private diagramRef: React.RefObject<ReactDiagram>;
 
+  /** @internal */
   constructor(props: DiagramProps) {
     super(props);
-    this.divRef = React.createRef();
+    this.diagramRef = React.createRef();
   }
 
   /**
-   * Returns a reference to the GoJS diagram instance for this component.
-   */
-  public getDiagram(): go.Diagram | null {
-    if (!this.divRef.current) return null;
-    return go.Diagram.fromDiv(this.divRef.current);
-  }
-
-  /**
-   * Initialize the diagram and add the required listeners.
+   * Get the diagram reference and add any desired diagram listeners.
+   * Typically the same function will be used for each listener, with the function using a switch statement to handle the events.
    */
   public componentDidMount() {
-    if (!this.divRef.current) return;
+    if (!this.diagramRef.current) return;
+    const diagram = this.diagramRef.current.getDiagram();
+    if (diagram instanceof go.Diagram) {
+      diagram.addDiagramListener('ChangedSelection', this.props.onDiagramEvent);
+    }
+  }
+
+  /**
+   * Get the diagram reference and remove listeners that were added during mounting.
+   */
+  public componentWillUnmount() {
+    if (!this.diagramRef.current) return;
+    const diagram = this.diagramRef.current.getDiagram();
+    if (diagram instanceof go.Diagram) {
+      diagram.removeDiagramListener('ChangedSelection', this.props.onDiagramEvent);
+    }
+  }
+
+  /**
+   * Diagram initialization method, which is passed to the Diagram component.
+   * This method is responsible for making the diagram and initializing the model, any templates,
+   * and maybe doing other initialization tasks like customizing tools.
+   * The model's data should not be set here, as the Diagram component handles that.
+   */
+  private initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
     const diagram =
-      $(go.Diagram, this.divRef.current,  // create a Diagram for the DIV HTML element
+      $(go.Diagram,
         {
           'undoManager.isEnabled': true,  // enable undo & redo
           'clickCreatingTool.archetypeNodeData': { text: 'new node', color: 'lightblue' },
+          draggingTool: new GuidedDraggingTool(),  // defined in GuidedDraggingTool.ts
+          'draggingTool.horizontalGuidelineColor': 'blue',
+          'draggingTool.verticalGuidelineColor': 'blue',
+          'draggingTool.centerGuidelineColor': 'green',
+          'draggingTool.guidelineWidth': 1,
           model: $(go.GraphLinksModel,
             {
-              linkKeyProperty: 'key',  // IMPORTANT! must be defined for merges and data sync
+              linkKeyProperty: 'key',  // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
               // positive keys for nodes
               makeUniqueKeyFunction: (m: go.Model, data: any) => {
                 let k = data.key || 1;
@@ -92,87 +119,21 @@ export class Diagram extends React.Component<DiagramProps, {}> {
         $(go.Shape, { toArrow: 'Standard' })
       );
 
-    // merge props into model to ensure a deep copy
-    const model = diagram.model as go.GraphLinksModel;
-    model.mergeNodeDataArray(this.props.nodeDataArray);
-    model.mergeLinkDataArray(this.props.linkDataArray);
-    model.modelData = this.props.modelData;
-
-    // initialize listeners
-    this.changedSelectionListener = (e: go.DiagramEvent) => {
-      this.props.onDiagramChange(e);
-    };
-    this.modelChangedListener = (e: go.ChangedEvent) => {
-      if (e.isTransactionFinished) {
-        this.props.onModelChange(e.model!.toIncrementalData(e));
-      }
-    };
-    diagram.addDiagramListener('ChangedSelection', this.changedSelectionListener);
-    diagram.addModelChangedListener(this.modelChangedListener);
-  }
-
-  /**
-   * Disassociate the diagram from the div and remove listeners.
-   */
-  public componentWillUnmount() {
-    const diagram = this.getDiagram();
-    if (diagram) {
-      diagram.div = null;
-      if (this.changedSelectionListener) diagram.removeDiagramListener('ChangedSelection', this.changedSelectionListener);
-      if (this.modelChangedListener) diagram.removeModelChangedListener(this.modelChangedListener);
-    }
-  }
-
-  /**
-   * Determines whether component needs to update by comparing external state passed as props against the GoJS model.
-   * @param nextProps
-   * @param nextState
-   */
-  public shouldComponentUpdate(nextProps: DiagramProps, nextState: any) {
-    if (nextProps.skipsDiagramUpdate) return false;
-    // quick shallow compare
-    if (nextProps.nodeDataArray === this.props.nodeDataArray &&
-        nextProps.linkDataArray === this.props.linkDataArray &&
-        nextProps.modelData === this.props.modelData) return false;
-    // compare new props vs current props, since any changes to array items should be immutable
-    if (nextProps.nodeDataArray.length !== this.props.nodeDataArray.length) return true;
-    for (let i = 0; i < nextProps.nodeDataArray.length; i++) {
-      const d1 = nextProps.nodeDataArray[i];
-      const d2 = this.props.nodeDataArray[i];
-      if (d1 !== d2) return true;
-    }
-    if (nextProps.linkDataArray.length !== this.props.linkDataArray.length) return true;
-    for (let i = 0; i < nextProps.linkDataArray.length; i++) {
-      const d1 = nextProps.linkDataArray[i];
-      const d2 = this.props.linkDataArray[i];
-      if (d1 !== d2) return true;
-    }
-    if (nextProps.modelData !== this.props.modelData) return true;
-    return false;
-  }
-
-  /**
-   * When the component updates, merge all data changes into the GoJS model to ensure everything stays in sync.
-   * The model change listener is removed during this update since the data changes are already known by the parent.
-   * @param prevProps
-   * @param prevState
-   */
-  public componentDidUpdate(prevProps: DiagramProps, prevState: any) {
-    const diagram = this.getDiagram();
-    if (diagram) {
-      const model = diagram.model as go.GraphLinksModel;
-      // don't need model change listener while performing known data updates
-      if (this.modelChangedListener) model.removeChangedListener(this.modelChangedListener);
-      model.startTransaction('update data');
-      model.mergeNodeDataArray(this.props.nodeDataArray);
-      model.mergeLinkDataArray(this.props.linkDataArray);
-      model.modelData = this.props.modelData;
-      model.commitTransaction('update data');
-      if (this.modelChangedListener) model.addChangedListener(this.modelChangedListener);
-    }
+    return diagram;
   }
 
   public render() {
-    return (<div ref={this.divRef} className='diagram-component'></div>);
+    return (
+      <ReactDiagram
+        ref={this.diagramRef}
+        divClassName='diagram-component'
+        initDiagram={this.initDiagram}
+        nodeDataArray={this.props.nodeDataArray}
+        linkDataArray={this.props.linkDataArray}
+        modelData={this.props.modelData}
+        onModelChange={this.props.onModelChange}
+        skipsDiagramUpdate={this.props.skipsDiagramUpdate}
+      />
+    );
   }
 }

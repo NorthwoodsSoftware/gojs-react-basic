@@ -1,23 +1,30 @@
 {
   "name": "gojs-react-basic",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "An example project demonstrating usage of GoJS and React together",
   "private": true,
-  "dependencies": {
-    "@types/node": "10.12.19",
-    "@types/react": "16.7.22",
-    "@types/react-dom": "16.0.11",
-    "fs-extra": "^8.1.0",
-    "gojs": "2.1.0-alpha3",
-    "immer": "^3.2.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^3.1.1",
-    "typescript": "3.2.4"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
+  },
+  "keywords": [
+    "react",
+    "gojs"
+  ],
+  "author": "Northwoods Software",
+  "dependencies": {
+    "@types/node": "12.7.5",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.9.0",
+    "fs-extra": "^8.1.0",
+    "gojs": "^2.1.0-beta1",
+    "gojs-react": "^1.0.0",
+    "immer": "^4.0.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.1.2",
+    "typescript": "^3.6.3"
   },
   "eslintConfig": {
     "extends": "react-app"
