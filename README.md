@@ -1,9 +1,9 @@
 # gojs-react-basic
 
-### By Northwoods Software for [GoJS 2.1 Beta](https://gojs.net/beta)
+### By Northwoods Software for [GoJS 2.1](https://gojs.net)
 
 This project provides a basic example of using GoJS in a React app.
-Check out the [Intro page on using GoJS with React](https://gojs.net/beta/intro/react.html) for more information.
+Check out the [Intro page on using GoJS with React](https://gojs.net/latest/intro/react.html) for more information.
 
 It makes use of the [gojs-react](https://github.com/NorthwoodsSoftware/gojs-react) package to handle some boilerplate for setting up and tearing down a Diagram component.
 
