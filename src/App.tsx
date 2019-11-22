@@ -270,7 +270,7 @@ class App extends React.Component<{}, AppState> {
           you can inspect the React state and see it updated as changes happen.
         </p>
         <p>
-          Check out the <a href='https://gojs.net/alpha/intro/react.html' target='_blank' rel='noopener noreferrer'>Intro page on using GoJS with React</a> for more information.
+          Check out the <a href='https://gojs.net/latest/intro/react.html' target='_blank' rel='noopener noreferrer'>Intro page on using GoJS with React</a> for more information.
         </p>
         <DiagramWrapper
           nodeDataArray={this.state.nodeDataArray}
