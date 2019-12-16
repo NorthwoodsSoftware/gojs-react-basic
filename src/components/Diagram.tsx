@@ -65,7 +65,8 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
     const diagram =
       $(go.Diagram,
         {
-          'undoManager.isEnabled': true,  // enable undo & redo
+          'undoManager.isEnabled': true,  // must be set to allow for model change listening
+          // 'undoManager.maxHistoryLength': 0,  // uncomment disable undo/redo functionality
           'clickCreatingTool.archetypeNodeData': { text: 'new node', color: 'lightblue' },
           draggingTool: new GuidedDraggingTool(),  // defined in GuidedDraggingTool.ts
           'draggingTool.horizontalGuidelineColor': 'blue',
