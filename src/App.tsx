@@ -1,5 +1,5 @@
 /*
-*  Copyright (C) 1998-2019 by Northwoods Software Corporation. All Rights Reserved.
+*  Copyright (C) 1998-2020 by Northwoods Software Corporation. All Rights Reserved.
 */
 
 import * as go from 'gojs';
@@ -11,6 +11,11 @@ import { SelectionInspector } from './components/SelectionInspector';
 
 import './App.css';
 
+/**
+ * Use a linkDataArray since we'll be using a GraphLinksModel,
+ * and modelData for demonstration purposes. Note, though, that
+ * both are optional props in ReactDiagram.
+ */
 interface AppState {
   nodeDataArray: Array<go.ObjectData>;
   linkDataArray: Array<go.ObjectData>;
