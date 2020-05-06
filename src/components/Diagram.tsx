@@ -62,6 +62,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
    */
   private initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
+    // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
     const diagram =
       $(go.Diagram,
         {
