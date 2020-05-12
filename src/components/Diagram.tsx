@@ -74,6 +74,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
           'draggingTool.verticalGuidelineColor': 'blue',
           'draggingTool.centerGuidelineColor': 'green',
           'draggingTool.guidelineWidth': 1,
+          layout: $(go.ForceDirectedLayout),
           model: $(go.GraphLinksModel,
             {
               linkKeyProperty: 'key',  // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel

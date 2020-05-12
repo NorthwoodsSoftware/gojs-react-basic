@@ -156,7 +156,7 @@ class App extends React.Component<{}, AppState> {
           insertedNodeKeys.forEach((key: go.Key) => {
             const nd = modifiedNodeMap.get(key);
             const idx = this.mapNodeKeyIdx.get(key);
-            if (nd && idx === undefined) {
+            if (nd && idx === undefined) {  // nodes won't be added if they already exist
               this.mapNodeKeyIdx.set(nd.key, narr.length);
               narr.push(nd);
             }
@@ -190,7 +190,7 @@ class App extends React.Component<{}, AppState> {
           insertedLinkKeys.forEach((key: go.Key) => {
             const ld = modifiedLinkMap.get(key);
             const idx = this.mapLinkKeyIdx.get(key);
-            if (ld && idx === undefined) {
+            if (ld && idx === undefined) {  // links won't be added if they already exist
               this.mapLinkKeyIdx.set(ld.key, larr.length);
               larr.push(ld);
             }
