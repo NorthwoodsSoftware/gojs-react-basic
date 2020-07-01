@@ -6,7 +6,7 @@ import * as go from 'gojs';
 import { produce } from 'immer';
 import * as React from 'react';
 
-import { DiagramWrapper } from './components/Diagram';
+import { DiagramWrapper } from './components/DiagramWrapper';
 import { SelectionInspector } from './components/SelectionInspector';
 
 import './App.css';
