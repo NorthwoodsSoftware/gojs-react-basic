@@ -12,6 +12,8 @@ and you'll notice the changes are reflected in the inspector area. You'll also n
 made in the inspector are reflected in the diagram. If you use the React dev tools,
 you can inspect the React state and see it updated as changes happen.
 
+For additional samples, see [gojs-react-samples](https://github.com/NorthwoodsSoftware/gojs-react-samples).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 It also uses [immer](https://immerjs.github.io/immer/docs/introduction) to simplify state update operations.
 
