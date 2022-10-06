@@ -1,14 +1,14 @@
 /*
-*  Copyright (C) 1998-2022 by Northwoods Software Corporation. All Rights Reserved.
-*/
+ *  Copyright (C) 1998-2022 by Northwoods Software Corporation. All Rights Reserved.
+ */
 
-import * as go from 'gojs';
-import { ReactDiagram } from 'gojs-react';
-import * as React from 'react';
+import * as go from "gojs";
+import { ReactDiagram } from "gojs-react";
+import * as React from "react";
 
-import { GuidedDraggingTool } from '../GuidedDraggingTool';
+import { GuidedDraggingTool } from "../GuidedDraggingTool";
 
-import './Diagram.css';
+import "./Diagram.css";
 
 interface DiagramProps {
   nodeDataArray: Array<go.ObjectData>;
@@ -39,7 +39,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
     if (!this.diagramRef.current) return;
     const diagram = this.diagramRef.current.getDiagram();
     if (diagram instanceof go.Diagram) {
-      diagram.addDiagramListener('ChangedSelection', this.props.onDiagramEvent);
+      diagram.addDiagramListener("ChangedSelection", this.props.onDiagramEvent);
     }
   }
 
@@ -50,7 +50,10 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
     if (!this.diagramRef.current) return;
     const diagram = this.diagramRef.current.getDiagram();
     if (diagram instanceof go.Diagram) {
-      diagram.removeDiagramListener('ChangedSelection', this.props.onDiagramEvent);
+      diagram.removeDiagramListener(
+        "ChangedSelection",
+        this.props.onDiagramEvent
+      );
     }
   }
 
@@ -63,81 +66,109 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
   private initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
     // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
-    const diagram =
-      $(go.Diagram,
-        {
-          'undoManager.isEnabled': true,  // must be set to allow for model change listening
-          // 'undoManager.maxHistoryLength': 0,  // uncomment disable undo/redo functionality
-          'clickCreatingTool.archetypeNodeData': { text: 'new node', color: 'lightblue' },
-          draggingTool: new GuidedDraggingTool(),  // defined in GuidedDraggingTool.ts
-          'draggingTool.horizontalGuidelineColor': 'blue',
-          'draggingTool.verticalGuidelineColor': 'blue',
-          'draggingTool.centerGuidelineColor': 'green',
-          'draggingTool.guidelineWidth': 1,
-          layout: $(go.ForceDirectedLayout),
-          model: $(go.GraphLinksModel,
-            {
-              linkKeyProperty: 'key',  // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
-              // positive keys for nodes
-              makeUniqueKeyFunction: (m: go.Model, data: any) => {
-                let k = data.key || 1;
-                while (m.findNodeDataForKey(k)) k++;
-                data.key = k;
-                return k;
-              },
-              // negative keys for links
-              makeUniqueLinkKeyFunction: (m: go.GraphLinksModel, data: any) => {
-                let k = data.key || -1;
-                while (m.findLinkDataForKey(k)) k--;
-                data.key = k;
-                return k;
-              }
-            })
-        });
+    const diagram = $(go.Diagram, {
+      "undoManager.isEnabled": true, // must be set to allow for model change listening
+      // 'undoManager.maxHistoryLength': 0,  // uncomment disable undo/redo functionality
+      "clickCreatingTool.archetypeNodeData": {
+        text: "new node",
+        color: "lightblue",
+      },
+      draggingTool: new GuidedDraggingTool(), // defined in GuidedDraggingTool.ts
+      "draggingTool.horizontalGuidelineColor": "blue",
+      "draggingTool.verticalGuidelineColor": "blue",
+      "draggingTool.centerGuidelineColor": "green",
+      "draggingTool.guidelineWidth": 1,
+      layout: $(go.ForceDirectedLayout),
+      model: $(go.GraphLinksModel, {
+        linkKeyProperty: "key", // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
+        // positive keys for nodes
+        makeUniqueKeyFunction: (m: go.Model, data: any) => {
+          let k = data.key || 1;
+          while (m.findNodeDataForKey(k)) k++;
+          data.key = k;
+          return k;
+        },
+        // negative keys for links
+        makeUniqueLinkKeyFunction: (m: go.GraphLinksModel, data: any) => {
+          let k = data.key || -1;
+          while (m.findLinkDataForKey(k)) k--;
+          data.key = k;
+          return k;
+        },
+      }),
+    });
 
     // define a simple Node template
-    diagram.nodeTemplate =
-      $(go.Node, 'Auto',  // the Shape will go around the TextBlock
-        new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-        $(go.Shape, 'RoundedRectangle',
-          {
-            name: 'SHAPE', fill: 'white', strokeWidth: 0,
-            // set the port properties:
-            portId: '', fromLinkable: true, toLinkable: true, cursor: 'pointer'
-          },
-          // Shape.fill is bound to Node.data.color
-          new go.Binding('fill', 'color')),
-        $(go.TextBlock,
-          { margin: 8, editable: true, font: '400 .875rem Roboto, sans-serif' },  // some room around the text
-          new go.Binding('text').makeTwoWay()
-        )
-      );
+    diagram.nodeTemplate = $(
+      go.Node,
+      "Auto", // the Shape will go around the TextBlock
+      new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+        go.Point.stringify
+      ),
+      $(
+        go.Shape,
+        "RoundedRectangle",
+        {
+          name: "SHAPE",
+          fill: "white",
+          strokeWidth: 0,
+          // set the port properties:
+          portId: "",
+          fromLinkable: true,
+          toLinkable: true,
+          cursor: "pointer",
+        },
+        // Shape.fill is bound to Node.data.color
+        new go.Binding("fill", "color")
+      ),
+      $(
+        go.TextBlock,
+        { margin: 8, editable: true, font: "400 .875rem Roboto, sans-serif" }, // some room around the text
+        new go.Binding("text").makeTwoWay()
+      )
+    );
 
     // relinking depends on modelData
-    diagram.linkTemplate =
-      $(go.Link,
-        new go.Binding('relinkableFrom', 'canRelink').ofModel(),
-        new go.Binding('relinkableTo', 'canRelink').ofModel(),
-        $(go.Shape),
-        $(go.Shape, { toArrow: 'Standard' })
-      );
+    diagram.linkTemplate = $(
+      go.Link,
+      new go.Binding("relinkableFrom", "canRelink").ofModel(),
+      new go.Binding("relinkableTo", "canRelink").ofModel(),
+      $(go.Shape),
+      $(go.Shape, { toArrow: "Standard" })
+    );
 
     return diagram;
   }
 
   public render() {
     return (
-      <ReactDiagram
-        ref={this.diagramRef}
-        divClassName='diagram-component'
-        style={{ backgroundColor: '#eee' }}
-        initDiagram={this.initDiagram}
-        nodeDataArray={this.props.nodeDataArray}
-        linkDataArray={this.props.linkDataArray}
-        modelData={this.props.modelData}
-        onModelChange={this.props.onModelChange}
-        skipsDiagramUpdate={this.props.skipsDiagramUpdate}
-      />
+      <div>
+        <button
+          disabled={
+            !!(
+              this.diagramRef.current &&
+              !this.diagramRef.current.getDiagram()?.undoManager.canUndo()
+            )
+          }
+          onClick={() =>
+            this.diagramRef.current &&
+            this.diagramRef.current.getDiagram()?.undoManager.undo()
+          }
+        >
+          Undo things
+        </button>
+        <ReactDiagram
+          ref={this.diagramRef}
+          divClassName="diagram-component"
+          style={{ backgroundColor: "#eee" }}
+          initDiagram={this.initDiagram}
+          nodeDataArray={this.props.nodeDataArray}
+          linkDataArray={this.props.linkDataArray}
+          modelData={this.props.modelData}
+          onModelChange={this.props.onModelChange}
+          skipsDiagramUpdate={this.props.skipsDiagramUpdate}
+        />
+      </div>
     );
   }
 }
