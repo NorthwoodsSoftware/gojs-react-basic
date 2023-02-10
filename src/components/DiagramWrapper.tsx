@@ -1,5 +1,5 @@
 /*
-*  Copyright (C) 1998-2022 by Northwoods Software Corporation. All Rights Reserved.
+*  Copyright (C) 1998-2023 by Northwoods Software Corporation. All Rights Reserved.
 */
 
 import * as go from 'gojs';
@@ -24,6 +24,8 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
    * Ref to keep a reference to the Diagram component, which provides access to the GoJS diagram via getDiagram().
    */
   private diagramRef: React.RefObject<ReactDiagram>;
+
+  private diagramStyle = { backgroundColor: '#eee' };
 
   /** @internal */
   constructor(props: DiagramProps) {
@@ -130,7 +132,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
       <ReactDiagram
         ref={this.diagramRef}
         divClassName='diagram-component'
-        style={{ backgroundColor: '#eee' }}
+        style={this.diagramStyle}
         initDiagram={this.initDiagram}
         nodeDataArray={this.props.nodeDataArray}
         linkDataArray={this.props.linkDataArray}
