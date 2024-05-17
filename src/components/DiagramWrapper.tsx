@@ -94,6 +94,8 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
                 data.key = k;
                 return k;
               }
+              // NOTE: the above "KeyFunction"s are simplistic and loop over data to avoid key collisions,
+              // they are not suitable for applications with lots of data
             })
         });
 
