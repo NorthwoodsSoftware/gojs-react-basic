@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 1998-2024 by Northwoods Software Corporation. All Rights Reserved.
+ *  Copyright (C) 1998-2025 by Northwoods Software Corporation. All Rights Reserved.
  */
 
 /*
