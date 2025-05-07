@@ -116,7 +116,7 @@ export const App = () => {
    * This method iterates over those changes and updates state to keep in sync with the GoJS model.
    * @param obj a JSON-formatted string
    */
-  const handleModelChange = (obj: go.IncrementalData) => {
+  const handleModelChange = (obj: go.IncrementalData, _: go.ChangedEvent) => {
     const insertedNodeKeys = obj.insertedNodeKeys;
     const modifiedNodeData = obj.modifiedNodeData;
     const removedNodeKeys = obj.removedNodeKeys;

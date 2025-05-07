@@ -16,7 +16,7 @@ interface DiagramProps {
   modelData: go.ObjectData;
   skipsDiagramUpdate: boolean;
   onDiagramEvent: (e: go.DiagramEvent) => void;
-  onModelChange: (e: go.IncrementalData) => void;
+  onModelChange: (idata: go.IncrementalData, e: go.ChangedEvent) => void;
 }
 
 export const DiagramWrapper = (props: DiagramProps) => {

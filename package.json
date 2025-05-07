@@ -15,7 +15,7 @@
   "author": "Northwoods Software",
   "dependencies": {
     "gojs": "^3.0.21",
-    "gojs-react": "^1.1.2",
+    "gojs-react": "^1.1.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "use-immer": "^0.11.0"
